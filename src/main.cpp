@@ -1,6 +1,7 @@
 #include<GL/glew.h>
 #include <GLFW/glfw3.h>
 #include<iostream>
+#include<string>
 
 
 void OpenGLTest() {
@@ -33,10 +34,12 @@ void OpenGLTest() {
     };
 
     unsigned int buffer;
+    //申请Buffers缓冲区地址
     glGenBuffers(1, &buffer);
+    //绑定buffers缓冲区的类型
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    //将数据放入到缓冲区中
     glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
 
@@ -55,6 +58,7 @@ void OpenGLTest() {
          glVertex2f(-1.0f, 0.5f);
          glVertex2f(-0.5f, 1.f);
          glEnd();*/
+        //绘画三角形，但是目前没有与自己申请的Buffers进行绑定，所以画不出来
         glDrawArrays(GL_TRIANGLES, 0, 3);
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -115,12 +119,11 @@ T RJYPrint(T& param) {
     return param;
 }
 
-#include<string>
 
 
 int main(void)
 {   
-    int x = 7;
+    /*int x = 7;
     const int cx = x;
     const int& rx = cx;
     std::string t = "hello,world";
@@ -129,9 +132,9 @@ int main(void)
     RJYPrint(rx);
    auto s = RJYPrint(t);
    auto z = RJYPrint(x);
-   std::cout << sizeof(z) << std::endl;
+   std::cout << sizeof(z) << std::endl;*/
 
-   
+    OpenGLTest();
 
     std::cin.get();
 }

@@ -1,20 +1,40 @@
-#include "../Public/LearnShader.h"
-#include "iostream"
+#include"..\Public\LearnShader.h"
 #include <string.h>
 #include<GL/glew.h>
 #include <GLFW/glfw3.h>
+using namespace std;
 
+LearnShader::LearnShader()
+{
 
-int LearnShader::CreateShader(const std::string VertexShader, const std::string FragmentShader)
+}
+
+LearnShader::~LearnShader()
+{
+
+}
+
+int LearnShader::CreateShader(const string& VertexShader, const string& FragmentShader)
 {
 	//创建一个新的空的 对象程序 并返回他的program
 	unsigned int Program =glCreateProgram();
 	unsigned int vs =ComplieShader(GL_VERTEX_SHADER, VertexShader);
 	unsigned int fs =ComplieShader(GL_FRAGMENT_SHADER, FragmentShader);
-	return 0;
+	//将一个着色器附加在程序上
+	glAttachShader(Program, vs);
+	glAttachShader(Program, fs);
+	//将程序对象附加在程序上
+	glLinkProgram(Program);
+	//验证是否能在当前OpenGL下执行
+	glValidateProgram(Program);
+
+	//清除着色器对象
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+	return Program;
 }
 
-unsigned int LearnShader::ComplieShader(unsigned int Type, const std::string& source)
+unsigned int LearnShader::ComplieShader(unsigned int Type, const string& source)
 {
 	//创建一个空的着色器对象 并返回一个 id
 	unsigned int id  = glCreateShader(Type);
@@ -44,13 +64,11 @@ unsigned int LearnShader::ComplieShader(unsigned int Type, const std::string& so
 		//获取着色器log数据
 		//参数二 用于存储返回字符的大小
 		glGetShaderInfoLog(id, lenght, &lenght, message);
-		std::cout << &message << std::endl;
+		std::cout << message << std::endl;
 
 		//删除创建的着色器对象，类似与new出来的对象 
 		glDeleteShader(id);
 		return 0;
 	}
-
-
 	return id;
 }

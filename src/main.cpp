@@ -3,6 +3,8 @@
 #include <GLFW/glfw3.h>
 #include<iostream>
 #include<string>
+#include "Public/LearnShader.h"
+#include <ctime>
 
 
 
@@ -30,13 +32,10 @@ void OpenGLTest() {
     if (glewInit() != GLEW_OK) {
         std::cout << "error" << std::endl;
     }
-    float positions[12]{
+    float positions[6]{
         -0.5f, 0.5f,
         0.0f, 1.f,
-        0.5f, -0.5f,
-         1.f, 0.5f,
-        0.0f, 1.f,
-        1.f, -0.5f
+        0.5f, -0.5f
     };
 
     unsigned int buffer;
@@ -59,7 +58,31 @@ void OpenGLTest() {
     //参数六 类型是void* 这个值一般受绑定的缓冲区地址影响，大概指的是偏移量
     glVertexAttribPointer(0, 2, GL_FLOAT,GL_FALSE,sizeof(float)*2,0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    std::string VertexShader = 
+        "#version 330 core\n"
+        "\n"
+        //vec4 代表一个点是四维向量数 必须是一个vec4 因为gl_position是vec4格式的 
+        "layout(location = 0) in vec4 positions;\n"
+        "\n"
+        "void main()\n"
+        "{\n"
+            "gl_Position=positions;\n"
+        "}\n";
+    //编写片段着色器
+    std::string FragmentShader = 
+        "#version 330 core\n"
+        "\n"
+        "layout(location = 0) out vec4 color;\n"
+        "\n"
+        "void main()\n"
+        "{\n"
+        "color = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+    LearnShader* lShader = new LearnShader();
+    unsigned int shader = lShader->CreateShader(VertexShader, FragmentShader);
+
+    //绑定我们使用的着色器
+    glUseProgram(shader);
 
 
 
